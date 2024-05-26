@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket League Cards</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="./js/index.js" defer></script>
+</head>
+
+<body>
+    <%- include('sidebar') %>
+        <section class="mainContent">
+            <h1>All cars with the playstyle: <%= playstyle %>
+            </h1>
+            <section class="cardsField">
+
+                <% vehicles.forEach(vehicle=> { %>
+                    <section class="cardsContainer">
+                        <section class="actualCards">
+                            <a href="../car/<%= vehicle.name %>">
+                                <h1>
+                                    <%= vehicle.name %>
+                                </h1>
+                                <img src="<%= vehicle.image %>">
+                            </a>
+                            <p>
+                                <%= vehicle.type %> - <a href="/class/<%= vehicle.class %>">
+                                        <%= vehicle.class %>
+                                    </a>
+                            </p>
+                            <p>
+                                <a href="/playstyle/<%= vehicle.playstyle[0] %>">
+                                    <%= vehicle.playstyle[0] %>
+                                </a> -
+                                <a href="/playstyle/<%= vehicle.playstyle[1] %>">
+                                    <%= vehicle.playstyle[1] %>
+                                </a>
+                            </p>
+                        </section>
+                    </section>
+                    <% }) %>
+
+            </section>
+        </section>
+</body>
+
+</html>

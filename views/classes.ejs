@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket League Cards</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="./js/index.js" defer></script>
+</head>
+
+<body>
+    <%- include('sidebar') %>
+        <section class="mainContent">
+            <h1>All Classes:</h1>
+            <section class="classesDisplay">
+
+                <% classes.forEach(classe=> { // can't name it class cause then it'll error out :( %>
+
+                    <p><a href="./class/<%= classe %>">
+                            <%= classe %>
+                        </a></p>
+                    <% }) %>
+
+            </section>
+
+        </section>
+</body>
+
+</html>

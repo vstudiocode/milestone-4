@@ -1,0 +1,202 @@
+[
+    {
+        "name": "Octane",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "balanced",
+            "versatile"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/f/f1/Octane_body_icon.png"
+    },
+    {
+        "name": "Dominus",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "powerful",
+            "agile"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/2/2b/Dominus_body_icon.png"
+    },
+    {
+        "name": "Breakout",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "fast",
+            "maneuverable"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/6/6b/Breakout_body_icon.png"
+    },
+    {
+        "name": "Batmobile",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "precise",
+            "quick"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/0/08/Batmobile_%282016%29_body_icon.png"
+    },
+    {
+        "name": "Takumi",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "nimble",
+            "responsive"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/c/c7/Takumi_body_icon.png"
+    },
+    {
+        "name": "Endo",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "slick",
+            "stylish"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/5/59/Endo_body_icon.png"
+    },
+    {
+        "name": "Mantis",
+        "type": "car",
+        "class": "epic",
+        "playstyle": [
+            "solid",
+            "stable"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/0/0f/Mantis_body_icon.png"
+    },
+    {
+        "name": "Jäger 619",
+        "type": "car",
+        "class": "epic",
+        "playstyle": [
+            "aggressive",
+            "robust"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/4/41/J%C3%A4ger_619_body_icon.png"
+    },
+    {
+        "name": "Imperator DT5",
+        "type": "car",
+        "class": "epic",
+        "playstyle": [
+            "commanding",
+            "fierce"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/e/e5/Imperator_DT5_body_icon.png"
+    },
+    {
+        "name": "Fennec",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "compact",
+            "responsive"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/2/2e/Fennec_body_icon.png"
+    },
+    {
+        "name": "Venom",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "versatile",
+            "nimble"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/9/9e/Venom_body_icon.png"
+    },
+    {
+        "name": "X-Devil",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "sleek",
+            "agile"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/4/42/X-Devil_body_icon.png"
+    },
+    {
+        "name": "Merc",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "heavy",
+            "powerful"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/3/3f/Merc_body_icon.png"
+    },
+    {
+        "name": "Road Hog",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "bulky",
+            "forceful"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/b/b2/Road_Hog_body_icon.png"
+    },
+    {
+        "name": "Gizmo",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "quirky",
+            "unpredictable"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/8/88/Gizmo_body_icon.png"
+    },
+    {
+        "name": "Scarab",
+        "type": "car",
+        "class": "common",
+        "playstyle": [
+            "unique",
+            "maneuverable"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/e/e3/Scarab_body_icon.png"
+    },
+    {
+        "name": "Proteus",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "aerodynamic",
+            "sleek"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/a/a7/Proteus_body_icon.png"
+    },
+    {
+        "name": "Aftershock",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "compact",
+            "powerful"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/0/0d/Aftershock_body_icon.png"
+    },
+    {
+        "name": "Backfire",
+        "type": "car",
+        "class": "rare",
+        "playstyle": [
+            "compact",
+            "nimble"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/c/cf/Backfire_body_icon.png"
+    },
+    {
+        "name": "Animus GP",
+        "type": "car",
+        "class": "epic",
+        "playstyle": [
+            "aggressive",
+            "slick"
+        ],
+        "image": "https://static.wikia.nocookie.net/rocketleague/images/a/a5/Animus_GP_body_icon.png"
+    }
+]
