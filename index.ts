@@ -126,13 +126,11 @@ app.get("/car/:name", async (req, res) => {
 });
 
 app.post("/api/change", async (req, res) => {
-    console.log(req.body);
     const { name, newName, newType, newClass, newImage } = req.body;
     await database.changeVehicleName(name, newName);
     await database.changeVehicleType(name, newType);
     await database.changeVehicleClass(name, newClass);
     await database.changeVehicleImage(name, newImage);
-    console.log("[server] Name changed successfully");
 });
 
 type ClassName = string;
@@ -270,8 +268,6 @@ app.post("/api/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    console.log(password);
-
     const account = await database.getAccountInfo(username);
 
     if (account) {
@@ -287,9 +283,9 @@ app.post("/api/login", async (req, res) => {
                 // sameSite: "Strict",
             });
 
-            res.status(200).json({ message: "Login success" });
+            res.status(200).json({ message: "Login succes" });
         } else {
-            res.status(401).json({ message: "Incorrect wachtwoord" });
+            res.status(401).json({ message: "Onjuist wachtwoord" });
         }
     }
 });
@@ -312,7 +308,6 @@ app.post("/api/register", async (req, res) => {
     const password = req.body.password;
 
     const account = await database.isUsernameTaken(username);
-    console.log(account);
 
     if (account) {
         return res.status(409).json({ message: "Gebruikersnaam is al in gebruik." });
@@ -322,7 +317,9 @@ app.post("/api/register", async (req, res) => {
     }
 });
 
-app.get('/logout', (req, res) => {
+app.get('/logout', async (req, res) => {
+    const cookie = req.cookies.sessionCookie;
+    await database.deleteSession(cookie);
     res.clearCookie('sessionCookie');
     res.redirect('/login');
 });

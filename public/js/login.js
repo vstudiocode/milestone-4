@@ -21,6 +21,7 @@ loginForm.addEventListener("submit", async (event) => {
         console.log(response);
 
         if (response.ok) {
+            console.log("test");
             window.location.href = "/";
         } else {
             errorField.innerText = responseJson.message;
