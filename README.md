@@ -1,7 +1,7 @@
 # Link to render.com
 https://milestone-4.onrender.com/
 
-# Links to related repositorie
+# Links to related repositories
 https://github.com/vstudiocode/milestone-1
 
 https://github.com/vstudiocode/milestone-2
