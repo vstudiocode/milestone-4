@@ -16,12 +16,8 @@ loginForm.addEventListener("submit", async (event) => {
         });
 
         const responseJson = await response.json();
-        console.log(responseJson);
-
-        console.log(response);
 
         if (response.ok) {
-            console.log("test");
             window.location.href = "/";
         } else {
             errorField.innerText = responseJson.message;
