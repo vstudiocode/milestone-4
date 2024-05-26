@@ -16,10 +16,8 @@ registerForm.addEventListener("submit", async (event) => {
         });
 
         const responseJson = await response.json();
-        console.log(responseJson);
-        console.log("ok: " + response.ok);
-        if (response.ok) {
 
+        if (response.ok) {
             window.location.href = "/login";
         } else {
             errorField.innerText = responseJson.message;
