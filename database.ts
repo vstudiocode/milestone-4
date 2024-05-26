@@ -47,31 +47,19 @@ export async function changeVehicleImage(name: string, newImage: string) {
 
 export async function validateCookie(cookie: string) {
     const documents = await sessionsCollection.countDocuments({ sessionCookie: cookie });
-    if (documents > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return documents > 0;
 }
 
 export async function isUserAdmin(cookie: string) {
     const sessionInfo = await sessionsCollection.findOne({ sessionCookie: cookie });
     const username = sessionInfo?.username;
     const userinfo = await accountCollection.findOne({ username: username });
-    if (userinfo?.role === "admin") {
-        return true;
-    } else {
-        return false;
-    }
+    return userinfo?.role === "admin";
 }
 
 export async function isUsernameTaken(username: string) {
     const documents = await accountCollection.countDocuments({ username: username });
-    if (documents > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return documents > 0;
 }
 
 export async function setupAccount(username: string, password: string, role: string) {
