@@ -2,6 +2,8 @@ import express from "express";
 import ejs from "ejs";
 import { Car } from "./interfaces/cars"
 import { MongoClient } from "mongodb";
+const cookieParser = require("cookie-parser");
+const bcrypt = require('bcrypt');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -11,8 +13,24 @@ const app = express();
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-app.set("port", 4200);
+app.set("port", 4469);
 app.use(express.json());
+app.use(cookieParser());
+
+const saltRounds = 2; // this is just 2 as this application isn't major -- and to remove strain on the server
+
+function makeCookie(length: number): string {
+    let result = "";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&@-$^§è!çà)(";
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
 
 async function fetchVehciles() {
     const documents = await vehiclesCollection.find({}).toArray();
@@ -42,15 +60,54 @@ async function changeVehicleImage(name: string, newImage: string) {
     await vehiclesCollection.updateOne({ name: name }, { $set: { image: newImage } });
 }
 
+async function validateCookie(cookie: string) {
+    const documents = await sessionsCollection.countDocuments({ sessionCookie: cookie });
+    if (documents > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function isUserAdmin(cookie: string) {
+    const sessionInfo = await sessionsCollection.findOne({ sessionCookie: cookie });
+    const username = sessionInfo?.username;
+    const userinfo = await accountCollection.findOne({ username: username });
+    if (userinfo?.role === "admin") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function isUsernameTaken(username: string) {
+    const documents = await accountCollection.countDocuments({ username: username });
+    if (documents > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 const client = new MongoClient(process.env.MONGODB_URI ?? "mongodb://localhost:27017");
 client.connect();
 
 const db = client.db("milestone");
 const vehiclesCollection = db.collection("part3");
+const accountCollection = db.collection("account");
+const sessionsCollection = db.collection("sessions");
 console.log("[server] Successfully initialized collections");
 
 app.get("/", async (req, res) => {
-    
+
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
+
 
     let filteredVehicles = await fetchVehciles();
 
@@ -95,6 +152,14 @@ app.get("/", async (req, res) => {
 
 app.get("/car/:name", async (req, res) => {
 
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
+
     let name: string = req.params.name;
     let vehicles = await fetchVehciles();
 
@@ -121,7 +186,9 @@ app.get("/car/:name", async (req, res) => {
         }
     }
 
-    res.render("car.ejs", { nameCar: nameCar, type: type, image: image, carClass: carClass, rarity: rarity, playstyle1: playstyle1, playstyle2: playstyle2 });
+    const isAdmin = await isUserAdmin(req.cookies.sessionCookie);
+
+    res.render("car.ejs", { nameCar: nameCar, type: type, image: image, carClass: carClass, rarity: rarity, playstyle1: playstyle1, playstyle2: playstyle2, isAdmin: isAdmin });
 });
 
 app.post("/api/change", async (req, res) => {
@@ -137,6 +204,14 @@ app.post("/api/change", async (req, res) => {
 type ClassName = string;
 
 app.get("/classes", async (req, res) => {
+
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
 
     let uniqueClasses: ClassName[] = [];
 
@@ -159,6 +234,14 @@ app.get("/classes", async (req, res) => {
 
 app.get("/class/:name", async (req, res) => {
 
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
+
     let name: string = req.params.name.toLowerCase();
 
     let filteredVehicles = await fetchVehciles();
@@ -177,6 +260,14 @@ app.get("/class/:name", async (req, res) => {
 });
 
 app.get("/playstyles", async (req, res) => {
+
+    const cookie = req.cookies.sessionCookie;
+
+    const session = validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
 
     let uniquePlaystyles: ClassName[] = [];
     let filteredVehicles = await fetchVehciles();
@@ -204,6 +295,14 @@ app.get("/playstyles", async (req, res) => {
 
 app.get("/playstyle/:name", async (req, res) => {
 
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (!session) {
+        return res.redirect("/login");
+    }
+
     let name: string = req.params.name.toLowerCase();
 
     let filteredVehicles = await fetchVehciles();
@@ -220,20 +319,129 @@ app.get("/playstyle/:name", async (req, res) => {
     res.render("playstyle.ejs", { playstyle: name, vehicles: showVehciles });
 });
 
+app.get("/login", async (req, res) => {
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (session) {
+        return res.redirect("/");
+    }
+
+    res.render("login.ejs");
+})
+
+app.post("/api/login", async (req, res) => {
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    console.log(password);
+
+    const account = await accountCollection.findOne({ username: username });
+
+    if (account) {
+        if (bcrypt.compareSync(password, account.password)) {
+
+            const sessionCookie = makeCookie(100);
+
+            const sessionDetails = {
+                username: username,
+                sessionCookie: sessionCookie
+            }
+
+            await sessionsCollection.insertOne(sessionDetails);
+
+            res.cookie("sessionCookie", sessionCookie, {
+                httpOnly: true,
+                maxAge: 1000 * 60 * 1440,
+                secure: false, // Transmit the cookie only over HTTPS
+                // sameSite: "Strict",
+            });
+
+            res.status(200).json({ message: "Login success" });
+        } else {
+            res.status(401).json({ message: "Incorrect wachtwoord" });
+        }
+    }
+});
+
+app.get('/register', async (req, res) => {
+    const cookie = req.cookies.sessionCookie;
+
+    const session = await validateCookie(cookie);
+
+    if (session) {
+        return res.redirect("/");
+    }
+
+    res.render('register.ejs');
+});
+
+app.post("/api/register", async (req, res) => {
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const account = await isUsernameTaken(username);
+    console.log(account);
+
+    if (account) {
+        return res.status(409).json({ message: "Gebruikersnaam is al in gebruik." });
+    } else {
+        const hashedPassword = await bcrypt.hashSync(password, saltRounds);
+        const newAccount = {
+            username: username,
+            password: hashedPassword,
+            role: "user"
+        }
+        await accountCollection.insertOne(newAccount);
+        return res.status(200).json({ message: "Succes" });
+    }
+});
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('sessionCookie');
+    res.redirect('/login');
+});
+
 
 app.listen(app.get("port"), async () => {
     const documentCount = await vehiclesCollection.countDocuments({});
-    console.log("[server] Number of documents:", documentCount);
+    const accountCount = await accountCollection.countDocuments({});
 
     if (documentCount === 0) {
         console.log("[server] Fetching data from API");
         const response = await fetch("https://raw.githubusercontent.com/vstudiocode/milestone-3/main/data.json");
         const data = await response.json();
-        
+
         for (const car of data) {
             await vehiclesCollection.insertOne(car);
         }
         console.log("[server] Data inserted into MongoDB");
+    }
+
+    if (accountCount === 0) {
+        const adminPassword = process.env.ADMINPASSWORD ?? "none";
+        const adminPass = await bcrypt.hashSync(adminPassword, saltRounds);
+        const adminAccount = {
+            username: "admin",
+            password: adminPass,
+            role: "admin"
+        }
+        await accountCollection.insertOne(adminAccount);
+        console.log("[server] Admin account created");
+
+        const userPassword = process.env.USERPASSWORD ?? "none";
+        const userPass = await bcrypt.hashSync(userPassword, saltRounds);
+        const userAccount = {
+            username: "user",
+            password: userPass,
+            role: "user"
+        }
+
+        await accountCollection.insertOne(userAccount);
+        console.log("[server] User account created");
     }
 
     console.log("[server] http://localhost:" + app.get("port"));

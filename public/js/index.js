@@ -29,4 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('sortPlaystyleSDesc').addEventListener('click', function () {
         window.location.href = '/?s=' + encodeURIComponent("playstylesdesc");
     });
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        window.location.href = '/logout';
+    });
 });
