@@ -12,6 +12,8 @@ https://github.com/vstudiocode/milestone-4
 
 # Some information
 
+Milestone 2:
+
 Design wise, it doesn't look that good. I'm a backend develper.
 
 My objective was making everything clickable and linked to eachother. Which is succeeded in :).
